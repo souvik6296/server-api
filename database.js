@@ -34,44 +34,38 @@ const addData = async (req, res) => {
         if (database) {
 
             firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/videos`)).then((snapshot0) => {
-                if (snapshot0.exists()) {
-                    const data = snapshot0.val()
-                    const keys = Object.keys(data);
-                    const length = keys.length;
+                const data = snapshot0.val()
+                const keys = Object.keys(data);
+                const length = keys.length;
 
-                    const dataSaved = firedatabase.set(firedatabase.ref(database, `BCW/videos/video${length}`), req.body);
+                const dataSaved = firedatabase.set(firedatabase.ref(database, `BCW/videos/video${length}`), req.body);
 
-                    if (dataSaved) {
+                if (dataSaved) {
 
-                        firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`)).then((snapshot0) => {
-                            if (snapshot0.exists()) {
-                                const data = snapshot0.val()
-                                const keys = Object.keys(data);
-                                const length = keys.length;
-                                const reqplayid = '';
-                                const videoCount = 0;
+                    firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`)).then((snapshot0) => {
+                        const data = snapshot0.val()
+                        const keys = Object.keys(data);
+                        const length = keys.length;
+                        const reqplayid = '';
+                        const videoCount = 0;
 
-                                for(let i = 0; i<length; i++){
-                                    var playid = "playlist"+i;
-                                    if(data[playid].pcode == req.body.playlist){
-                                        reqplayid = playid;
-                                        videoCount = data[playid].vcount+1;
-                                        break;
-                                    }
-                                }
-                                const dataSaved = firedatabase.set(firedatabase.ref(database, `BCW/playlists/${reqplayid}/vcount`), videoCount);
-
-                                if (dataSaved) {
-            
-                                    // console.log("Data saved successfully");
-                                    res.status(200).send({ msg: "Data saved successfully" });
-                                }
-
-
+                        for(let i = 0; i<length; i++){
+                            var playid = "playlist"+i;
+                            if(data[playid].pcode == req.body.playlist){
+                                reqplayid = playid;
+                                videoCount = data[playid].vcount+1;
+                                break;
                             }
-                        });
+                        }
+                        const dataSaved = firedatabase.set(firedatabase.ref(database, `BCW/playlists/${reqplayid}/vcount`), videoCount);
 
-                    }
+                        if (dataSaved) {
+    
+                            // console.log("Data saved successfully");
+                            res.status(200).send({ msg: "Data saved successfully" });
+                        }
+                    });
+
                 }
             });
 
@@ -119,18 +113,16 @@ const addPlayData = async (req, res) => {
         if (database) {
 
             firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`)).then((snapshot0) => {
-                if (snapshot0.exists()) {
-                    const data = snapshot0.val()
-                    const keys = Object.keys(data);
-                    const length = keys.length;
+                const data = snapshot0.val()
+                const keys = Object.keys(data);
+                const length = keys.length;
 
-                    const dataSaved = firedatabase.set(firedatabase.ref(database, `BCW/playlists/playlist${length}`), req.body);
+                const dataSaved = firedatabase.set(firedatabase.ref(database, `BCW/playlists/playlist${length}`), req.body);
 
-                    if (dataSaved) {
+                if (dataSaved) {
 
-                        // console.log("Data saved successfully");
-                        res.status(200).send({ msg: "Data saved successfully" });
-                    }
+                    // console.log("Data saved successfully");
+                    res.status(200).send({ msg: "Data saved successfully" });
                 }
             });
 
@@ -237,38 +229,30 @@ const saveImg = async (req, res) => {
             const dbRef = firedatabase.ref(firedatabase.getDatabase(app0));
 
             firedatabase.get(firedatabase.child(dbRef, `BCW/videos`)).then((snapshot0) => {
-                if (snapshot0.exists()) {
-                    const data = snapshot0.val()
-                    const keys = Object.keys(data);
-                    const length = keys.length;
+                const data = snapshot0.val()
+                const keys = Object.keys(data);
+                const length = keys.length;
 
 
-                    // Create a storage reference from our storage service
-                    const storageRef = firestorage.ref(storage, `images/thumbnails/videothumbnails/video${length}.png`);
+                // Create a storage reference from our storage service
+                const storageRef = firestorage.ref(storage, `images/thumbnails/videothumbnails/video${length}.png`);
 
-                    // const bucket= firestorage.bucket();
-
-
-
-                    firestorage.uploadBytes(storageRef, req.file.buffer, {
-                        contentType: req.file.mimetype,
-                    }).then((snapshot) => {
-
-                        firestorage.getDownloadURL(snapshot.ref)
-                            .then((url) => {
-                                // console.log(`image uploaded url : ${url}`);
-                                res.status(200).send({ url: url });
-                            })
-
-
-                    });
+                // const bucket= firestorage.bucket();
 
 
 
+                firestorage.uploadBytes(storageRef, req.file.buffer, {
+                    contentType: req.file.mimetype,
+                }).then((snapshot) => {
 
-                } else {
-                    // console.log("No data available");
-                }
+                    firestorage.getDownloadURL(snapshot.ref)
+                        .then((url) => {
+                            // console.log(`image uploaded url : ${url}`);
+                            res.status(200).send({ url: url });
+                        })
+
+
+                });
             }).catch((error) => {
                 console.error(error);
             });
@@ -300,38 +284,30 @@ const savePlayImg = async (req, res) => {
             const dbRef = firedatabase.ref(firedatabase.getDatabase(app0));
 
             firedatabase.get(firedatabase.child(dbRef, `BCW/playlists`)).then((snapshot0) => {
-                if (snapshot0.exists()) {
-                    const data = snapshot0.val()
-                    const keys = Object.keys(data);
-                    const length = keys.length;
+                const data = snapshot0.val()
+                const keys = Object.keys(data);
+                const length = keys.length;
 
 
-                    // Create a storage reference from our storage service
-                    const storageRef = firestorage.ref(storage, `images/thumbnails/playthumbnails/video${length}.png`);
+                // Create a storage reference from our storage service
+                const storageRef = firestorage.ref(storage, `images/thumbnails/playthumbnails/video${length}.png`);
 
-                    // const bucket= firestorage.bucket();
-
-
-
-                    firestorage.uploadBytes(storageRef, req.file.buffer, {
-                        contentType: req.file.mimetype,
-                    }).then((snapshot) => {
-
-                        firestorage.getDownloadURL(snapshot.ref)
-                            .then((url) => {
-                                // console.log(`image uploaded url : ${url}`);
-                                res.status(200).send({ url: url });
-                            })
-
-
-                    });
+                // const bucket= firestorage.bucket();
 
 
 
+                firestorage.uploadBytes(storageRef, req.file.buffer, {
+                    contentType: req.file.mimetype,
+                }).then((snapshot) => {
 
-                } else {
-                    // console.log("No data available");
-                }
+                    firestorage.getDownloadURL(snapshot.ref)
+                        .then((url) => {
+                            // console.log(`image uploaded url : ${url}`);
+                            res.status(200).send({ url: url });
+                        })
+
+
+                });
             }).catch((error) => {
                 console.error(error);
             });
