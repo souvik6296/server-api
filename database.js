@@ -158,9 +158,13 @@ const savePlayImg = async (req, res) => {
         const storage = firestorage.getStorage(app0);
         const dbRef = firedatabase.ref(firedatabase.getDatabase(app0));
         const snapshot0 = await firedatabase.get(firedatabase.child(dbRef, `BCW/playlists`));
-        const data = snapshot0.val();
-        const keys = Object.keys(data);
-        const length = keys.length;
+        var length = 0;
+        if(snapshot0.exists()){
+
+            const data = snapshot0.val();
+            const keys = Object.keys(data);
+            length = keys.length;
+        }
 
         const storageRef = firestorage.ref(storage, `images/thumbnails/playthumbnails/video${length}.png`);
 
