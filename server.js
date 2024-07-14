@@ -42,7 +42,7 @@ app.use("/admin", router);
 
 const path = require("path");
 app.get("/", (req, res) => {
-    res.status(200).send("Server is Working");
+    res.status(200).send("Server is Working fine");
 });
 
 
