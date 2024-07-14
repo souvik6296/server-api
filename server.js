@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const corsOptions = {
-    origin: "*",
+    origin: "https://bcw.souvikgupta.xyz",
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true,
 }
@@ -20,6 +20,11 @@ const router = express.Router();
 
 
 app.use(express.json());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://bcw.souvikgupta.xyz");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 
 
