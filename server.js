@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const corsOptions = {
-    origin: ["https://bcw-tech-official.vercel.app", "https://bcw.souvikgupta.xyz"],
+    origin: "https://bcw.souvikgupta.xyz",
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true,
 }
