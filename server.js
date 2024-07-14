@@ -11,22 +11,21 @@ const corsOptions = {
     origin: "https://bcw.souvikgupta.xyz",
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true,
-}
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+};
 
 const app = express();
 app.use(cors(corsOptions));
-const router = express.Router();
 
-
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
-app.use((req, res) => {
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Origin", "https://bcw.souvikgupta.xyz");
-});
+app.use(express.urlencoded({ extended: true }));
 
+const router = express.Router();
 
-
+// Define routes
 router.route("/upload").post(Databases.addData);
 router.route("/editvideo").post(Databases.editData);
 router.route("/upload/playlist").post(Databases.addPlayData);
@@ -41,13 +40,10 @@ const PORT = 4000;
 
 app.use("/admin", router);
 
-
-
 app.get("/", (req, res) => {
     res.status(200).send("Server is Working fine");
 });
 
-
 app.listen(PORT, () => {
     console.log(`Server is live at port ${PORT}`);
-})
+});
