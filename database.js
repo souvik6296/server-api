@@ -23,9 +23,18 @@ const addData = async (req, res) => {
             console.log("Data saved to videos");
 
             const snapshot1 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`));
-            const playlistData = snapshot1.val();
-            const playlistKeys = Object.keys(playlistData);
-            const playlistLength = playlistKeys.length;
+            
+
+            var playlistLength = 0;
+            if(snapshot1.exists()){
+    
+                const playlistData = snapshot1.val();
+                const playlistKeys = Object.keys(playlistData);
+                playlistLength = playlistKeys.length;
+            }
+
+
+
             let reqplayid = '';
             let videoCount = 0;
 
@@ -69,9 +78,13 @@ const addPlayData = async (req, res) => {
         const database = firedatabase.getDatabase(app0);
         if (database) {
             const snapshot0 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`));
-            const data = snapshot0.val();
-            const keys = Object.keys(data);
-            const length = keys.length;
+            var length = 0;
+            if(snapshot0.exists()){
+    
+                const data = snapshot0.val();
+                const keys = Object.keys(data);
+                length = keys.length;
+            }
             await firedatabase.set(firedatabase.ref(database, `BCW/playlists/playlist${length}`), req.body);
             console.log("Data saved to playlists");
             res.status(200).send({ msg: "Data saved successfully" });
@@ -136,9 +149,13 @@ const saveImg = async (req, res) => {
         const storage = firestorage.getStorage(app0);
         const dbRef = firedatabase.ref(firedatabase.getDatabase(app0));
         const snapshot0 = await firedatabase.get(firedatabase.child(dbRef, `BCW/videos`));
-        const data = snapshot0.val();
-        const keys = Object.keys(data);
-        const length = keys.length;
+        var length = 0;
+        if(snapshot0.exists()){
+
+            const data = snapshot0.val();
+            const keys = Object.keys(data);
+            length = keys.length;
+        }
 
         const storageRef = firestorage.ref(storage, `images/thumbnails/videothumbnails/video${length}.png`);
 
