@@ -53,7 +53,7 @@ const PORT = 4000;
 app.use("/admin", router);
 
 app.get("/", (req, res) => {
-    res.status(200).send("Server is Working perfect");
+    res.status(200).send("Server is Working nice");
 });
 
 app.listen(PORT, () => {
