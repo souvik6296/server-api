@@ -20,10 +20,9 @@ const router = express.Router();
 
 
 app.use(express.json());
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://bcw.souvikgupta.xyz");
+app.use((req, res) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+    res.header("Access-Control-Allow-Origin", "https://bcw.souvikgupta.xyz");
 });
 
 
@@ -44,8 +43,6 @@ app.use("/admin", router);
 
 
 
-
-const path = require("path");
 app.get("/", (req, res) => {
     res.status(200).send("Server is Working fine");
 });
