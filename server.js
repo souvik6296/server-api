@@ -42,8 +42,7 @@ app.use("/admin", router);
 
 const path = require("path");
 app.get("/", (req, res) => {
-    app.use(express.static(path.resolve(__dirname, "client", "dist")));
-    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+    res.status(200).send({msg: "Server is Working"});
 });
 
 
