@@ -16,19 +16,20 @@ const corsOptions = {
 
 const app = express();
 
-// Handle CORS
+// Apply CORS middleware
 app.use(cors(corsOptions));
 
 // Handle preflight requests
 app.options('*', cors(corsOptions));
 
+// Middleware to parse request bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Set CORS headers for all responses
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "https://bcw.souvikgupta.xyz");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, HEAD");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
     next();
@@ -52,7 +53,7 @@ const PORT = 4000;
 app.use("/admin", router);
 
 app.get("/", (req, res) => {
-    res.status(200).send("Server is Working good");
+    res.status(200).send("Server is Working perfect");
 });
 
 app.listen(PORT, () => {
