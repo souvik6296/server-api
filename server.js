@@ -3,7 +3,6 @@ const cors = require("cors");
 const multer = require("multer");
 const Databases = require("./database");
 const mailer = require("./mailsender");
-const request = require('request');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -58,10 +57,7 @@ app.get("/", (req, res) => {
     res.status(200).send("Server is Working nice");
 });
 
-app.get('/proxy', (req, res) => {
-    const url = req.query.url;
-    request({ url }).pipe(res);
-  });
+
 
 app.listen(PORT, () => {
     console.log(`Server is live at port ${PORT}`);
