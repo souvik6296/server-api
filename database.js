@@ -15,58 +15,53 @@ const addData = async (req, res) => {
         console.log("addData called");
         const database = firedatabase.getDatabase(app0);
         if (database) {
-            const snapshot0 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/videos`));
-            var length = 0;
+            const dbRef = firedatabase.ref(database);
+
+            // Fetch videos
+            const snapshot0 = await firedatabase.get(firedatabase.child(dbRef, `BCW/videos`));
+            let length = 0;
             if (snapshot0.exists()) {
-
                 const data = snapshot0.val();
-                const keys = Object.keys(data);
-                length = keys.length;
+                length = Object.keys(data).length;
             }
 
-            const vupload = await firedatabase.set(firedatabase.ref(database, `BCW/videos/video${length}`), req.body);
-            if (vupload) {
-                console.log("Data saved to videos");
+            // Save new video data
+            await firedatabase.set(firedatabase.ref(database, `BCW/videos/video${length}`), req.body);
+            console.log("Data saved to videos");
 
-                const snapshot1 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`));
-
-
-
-                var playlistLength = 0;
-                playlistData = null;
-                if (snapshot1.exists()) {
-
-                    playlistData = snapshot1.val();
-                    const playlistKeys = Object.keys(playlistData);
-                    playlistLength = playlistKeys.length;
-                }
-
-
-
-                let reqplayid = '';
-                let videoCount = 0;
-
-                for (let i = 0; i < playlistLength; i++) {
-                    const playid = "playlist" + i;
-                    if (playlistData[playid].pcode == req.body.playlist) {
-                        reqplayid = playid;
-                        videoCount = playlistData[playid].vcount + 1;
-                        break;
-                    }
-                }
-                await firedatabase.set(firedatabase.ref(database, `BCW/playlists/${reqplayid}/vcount`), videoCount);
-                console.log("Video count updated in playlists");
-
-                res.status(200).send({ msg: "Data saved successfully" });
-
+            // Fetch playlists
+            const snapshot1 = await firedatabase.get(firedatabase.child(dbRef, `BCW/playlists`));
+            if (!snapshot1.exists()) {
+                return res.status(200).send({ msg: "Data saved successfully, no playlists found" });
             }
 
+            const playlistData = snapshot1.val();
+            let playlistUpdated = false;
+
+            for (const [i, playid] of Object.keys(playlistData).entries()) {
+                if (playlistData[playid].pcode == req.body.playlist) {
+                    const videoCount = playlistData[playid].vcount + 1;
+                    await firedatabase.set(firedatabase.ref(database, `BCW/playlists/${playid}/vcount`), videoCount);
+                    console.log("Video count updated in playlists");
+                    playlistUpdated = true;
+                    break;
+                }
+            }
+
+            if (!playlistUpdated) {
+                console.log("No matching playlist found");
+            }
+
+            return res.status(200).send({ msg: "Data saved successfully" });
+        } else {
+            throw new Error("Database not available");
         }
     } catch (error) {
         console.error("Error in addData:", error);
-        res.status(500).send({ error: "Internal Server Error" });
+        return res.status(500).send({ error: "Internal Server Error" });
     }
-}
+};
+
 
 const editData = async (req, res) => {
     try {
