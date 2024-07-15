@@ -195,4 +195,31 @@ const savePlayImg = async (req, res) => {
     }
 }
 
-module.exports = { addData, retriveData, saveImg, retriveAdminData, retrivePlaylists, savePlayImg, addPlayData, editData };
+const savePDF = async (req, res) => {
+    try {
+        console.log("savePlayPdf called");
+        const storage = firestorage.getStorage(app0);
+        const dbRef = firedatabase.ref(firedatabase.getDatabase(app0));
+        const snapshot0 = await firedatabase.get(firedatabase.child(dbRef, `BCW/playlists`));
+        var length = 0;
+        if (snapshot0.exists()) {
+            const data = snapshot0.val();
+            const keys = Object.keys(data);
+            length = keys.length;
+        }
+    
+        const storageRef = firestorage.ref(storage, `pdfs/documents/document${length}.pdf`);  // Change path and extension
+    
+        const snapshot = await firestorage.uploadBytes(storageRef, req.file.buffer, { contentType: req.file.mimetype });
+        const url = await firestorage.getDownloadURL(snapshot.ref);
+        console.log(`PDF uploaded, URL: ${url}`);
+        res.status(200).send({ url: url });
+    } catch (error) {
+        console.error("Error in savePlayPdf:", error);
+        res.status(500).send({ error: "Internal Server Error" });
+    }
+    
+
+}
+
+module.exports = { addData, retriveData, saveImg, retriveAdminData, retrivePlaylists, savePlayImg, addPlayData, editData, savePDF };

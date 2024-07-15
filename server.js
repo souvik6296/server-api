@@ -43,6 +43,7 @@ router.route("/editvideo").post(Databases.editData);
 router.route("/upload/playlist").post(Databases.addPlayData);
 router.route("/upload/img").post(upload.single("image"), Databases.saveImg);
 router.route("/upload/playimg").post(upload.single("image"), Databases.savePlayImg);
+router.route("/upload/pdf").post(upload.single("pdf"), Databases.savePDF);
 router.route("/contactus").post(mailer.sendEmail);
 router.route("/read").get(Databases.retriveData);
 router.route("/read/playlists").get(Databases.retrivePlaylists);
