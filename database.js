@@ -16,18 +16,23 @@ const addData = async (req, res) => {
         const database = firedatabase.getDatabase(app0);
         if (database) {
             const snapshot0 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/videos`));
-            const data = snapshot0.val();
-            const keys = Object.keys(data);
-            const length = keys.length;
+            var length = 0;
+            if (snapshot0.exists()) {
+
+                const data = snapshot0.val();
+                const keys = Object.keys(data);
+                length = keys.length;
+            }
+
             await firedatabase.set(firedatabase.ref(database, `BCW/videos/video${length}`), req.body);
             console.log("Data saved to videos");
 
             const snapshot1 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`));
-            
+
 
             var playlistLength = 0;
-            if(snapshot1.exists()){
-    
+            if (snapshot1.exists()) {
+
                 const playlistData = snapshot1.val();
                 const playlistKeys = Object.keys(playlistData);
                 playlistLength = playlistKeys.length;
@@ -79,8 +84,8 @@ const addPlayData = async (req, res) => {
         if (database) {
             const snapshot0 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`));
             var length = 0;
-            if(snapshot0.exists()){
-    
+            if (snapshot0.exists()) {
+
                 const data = snapshot0.val();
                 const keys = Object.keys(data);
                 length = keys.length;
@@ -150,7 +155,7 @@ const saveImg = async (req, res) => {
         const dbRef = firedatabase.ref(firedatabase.getDatabase(app0));
         const snapshot0 = await firedatabase.get(firedatabase.child(dbRef, `BCW/videos`));
         var length = 0;
-        if(snapshot0.exists()){
+        if (snapshot0.exists()) {
 
             const data = snapshot0.val();
             const keys = Object.keys(data);
@@ -176,7 +181,7 @@ const savePlayImg = async (req, res) => {
         const dbRef = firedatabase.ref(firedatabase.getDatabase(app0));
         const snapshot0 = await firedatabase.get(firedatabase.child(dbRef, `BCW/playlists`));
         var length = 0;
-        if(snapshot0.exists()){
+        if (snapshot0.exists()) {
 
             const data = snapshot0.val();
             const keys = Object.keys(data);
@@ -207,9 +212,9 @@ const savePDF = async (req, res) => {
             const keys = Object.keys(data);
             length = keys.length;
         }
-    
+
         const storageRef = firestorage.ref(storage, `pdfs/documents/document${length}.pdf`);  // Change path and extension
-    
+
         const snapshot = await firestorage.uploadBytes(storageRef, req.file.buffer, { contentType: req.file.mimetype });
         const url = await firestorage.getDownloadURL(snapshot.ref);
         console.log(`PDF uploaded, URL: ${url}`);
@@ -218,7 +223,7 @@ const savePDF = async (req, res) => {
         console.error("Error in savePlayPdf:", error);
         res.status(500).send({ error: "Internal Server Error" });
     }
-    
+
 
 }
 
