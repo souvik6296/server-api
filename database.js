@@ -24,37 +24,43 @@ const addData = async (req, res) => {
                 length = keys.length;
             }
 
-            await firedatabase.set(firedatabase.ref(database, `BCW/videos/video${length}`), req.body);
-            console.log("Data saved to videos");
+            const vupload = await firedatabase.set(firedatabase.ref(database, `BCW/videos/video${length}`), req.body);
+            if (vupload) {
+                console.log("Data saved to videos");
 
-            const snapshot1 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`));
-
-
-            var playlistLength = 0;
-            if (snapshot1.exists()) {
-
-                const playlistData = snapshot1.val();
-                const playlistKeys = Object.keys(playlistData);
-                playlistLength = playlistKeys.length;
-            }
+                const snapshot1 = await firedatabase.get(firedatabase.child(firedatabase.ref(database), `BCW/playlists`));
 
 
 
-            let reqplayid = '';
-            let videoCount = 0;
+                var playlistLength = 0;
+                playlistData = null;
+                if (snapshot1.exists()) {
 
-            for (let i = 0; i < playlistLength; i++) {
-                const playid = "playlist" + i;
-                if (playlistData[playid].pcode == req.body.playlist) {
-                    reqplayid = playid;
-                    videoCount = playlistData[playid].vcount + 1;
-                    break;
+                    playlistData = snapshot1.val();
+                    const playlistKeys = Object.keys(playlistData);
+                    playlistLength = playlistKeys.length;
                 }
-            }
-            await firedatabase.set(firedatabase.ref(database, `BCW/playlists/${reqplayid}/vcount`), videoCount);
-            console.log("Video count updated in playlists");
 
-            res.status(200).send({ msg: "Data saved successfully" });
+
+
+                let reqplayid = '';
+                let videoCount = 0;
+
+                for (let i = 0; i < playlistLength; i++) {
+                    const playid = "playlist" + i;
+                    if (playlistData[playid].pcode == req.body.playlist) {
+                        reqplayid = playid;
+                        videoCount = playlistData[playid].vcount + 1;
+                        break;
+                    }
+                }
+                await firedatabase.set(firedatabase.ref(database, `BCW/playlists/${reqplayid}/vcount`), videoCount);
+                console.log("Video count updated in playlists");
+
+                res.status(200).send({ msg: "Data saved successfully" });
+
+            }
+
         }
     } catch (error) {
         console.error("Error in addData:", error);
