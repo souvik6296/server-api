@@ -45,7 +45,7 @@ const addData = async (req, res) => {
 
             for (let i = 0; i < playlistLength; i++) {
                 const playid = "playlist" + i;
-                if (playlistData[playid].pcode === req.body.playlist) {
+                if (playlistData[playid].pcode == req.body.playlist) {
                     reqplayid = playid;
                     videoCount = playlistData[playid].vcount + 1;
                     break;
