@@ -1,3 +1,4 @@
+const cors = require('cors')({ origin: true });
 const firebase = require("firebase/app");
 const firedatabase = require("firebase/database");
 const firestorage = require("firebase/storage");
