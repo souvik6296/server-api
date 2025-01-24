@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const corsOptions = {
-    origin: ["https://bcw.souvikgupta.xyz", "http://localhost:3000"],
+    origin: "*", // Allow all origins
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true,
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Set CORS headers for all responses
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://bcw.souvikgupta.xyz");
+    res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
@@ -56,8 +56,6 @@ app.use("/admin", router);
 app.get("/", (req, res) => {
     res.status(200).send("Server is Working nice");
 });
-
-
 
 app.listen(PORT, () => {
     console.log(`Server is live at port ${PORT}`);
