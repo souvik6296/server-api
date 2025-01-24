@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const corsOptions = {
-    origin: "https://bcw.souvikgupta.xyz",
+    origin: ["https://bcw.souvikgupta.xyz", "http://localhost:3000"],
     methods: "GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials: true,
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
